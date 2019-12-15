@@ -1,0 +1,30 @@
+{
+    "extends": [
+        "tslint:recommended"
+    ],
+    "rules": {
+        "semicolon": [
+            true,
+            "always"
+        ],
+        "indent": [
+            true,
+            "spaces",
+            4
+        ],
+        "quotemark": [
+            true,
+            "double"
+        ],
+        "member-ordering": false,
+        "no-console": false,
+        "no-trailing-whitespace": false,
+        "no-string-literal": false,
+        "no-empty": false,
+        "object-literal-sort-keys": false,
+        "interface-name": false,
+        "max-classes-per-file": false,
+        "arrow-parens": false,
+        "ordered-imports": false
+    }
+}

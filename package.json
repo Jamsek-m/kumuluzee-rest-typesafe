@@ -1,0 +1,51 @@
+{
+    "name": "@mjamsek/kumuluzee-rest-typesafe",
+    "version": "0.0.1",
+    "description": "Typesafe library for KumuluzEE Rest",
+    "main": "dist/kumuluzee-rest.typesafe.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist/**/*"
+    ],
+    "scripts": {
+        "lint": "tslint -p . --fix",
+        "compile": "tsc",
+        "build": "webpack",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "kumuluzee",
+        "rest",
+        "kumuluzee-rest",
+        "typesafe"
+    ],
+    "author": "Miha Jamšek <miha_jamsek@windowslive.com> (https://github.com/Jamsek-m)",
+    "maintainers": [
+        {
+            "name": "Miha Jamšek",
+            "email": "miha_jamsek@windowslive.com",
+            "url": "https://github.com/Jamsek-m"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Jamsek-m/kumuluzee-rest-typesafe"
+    },
+    "bugs": {
+        "email": "miha_jamsek@windowslive.com",
+        "url": "https://github.com/Jamsek-m/kumuluzee-rest-typesafe/issues"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "webpack": "~4.41.2",
+        "terser-webpack-plugin": "~2.3.0",
+        "clean-webpack-plugin": "~3.0.0",
+        "ts-loader": "~6.2.1",
+        "webpack-cli": "~3.3.10",
+        "typescript": "~3.7.3",
+        "tslint": "~5.20.1"
+    },
+    "publishConfig": {
+        "registry": "https://nexus.mjamsek.com/repository/npm-snapshots/"
+    }
+}
