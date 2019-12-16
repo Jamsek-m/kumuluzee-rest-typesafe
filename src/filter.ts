@@ -1,45 +1,97 @@
 export class QueryFilter {
-    public field: string;
-    public _operation: QueryFilter.Operation;
+
+    private _field: string;
+    private _operation: QueryFilter.Operation;
     private _value: string;
     
-    get value(): string {
+    /**
+     * Value to be filtered
+     */
+    public get value(): string {
         return this._value;
     }
     
-    get operation(): QueryFilter.Operation {
+    /**
+     * Filter operation
+     */
+    public get operation(): QueryFilter.Operation {
         return this._operation;
     }
     
-    public setValue(value: string) {
+    /**
+     * Field name to filter by
+     */
+    public get field(): string {
+        return this._field;
+    }
+    
+    /**
+     * Set query value of type string
+     * @param value
+     */
+    public setValue(value: string): QueryFilter {
         this._value = `'${value}'`;
+        return this;
     }
     
-    public setNumberValue(value: number) {
+    /**
+     * Set query value of type number
+     * @param value
+     */
+    public setNumberValue(value: number): QueryFilter {
         this._value = value.toString(10);
+        return this;
     }
     
-    public setListValue(value: number[] | string[] | boolean[]) {
+    /**
+     * Set query value of type list
+     * @param value
+     */
+    public setListValue(...value: number[] | string[] | boolean[]): QueryFilter {
         this._value = `[${value.join(",")}]`;
+        return this;
     }
     
-    public setDateValue(value: Date) {
+    /**
+     * Set query value of type Date
+     * @param value
+     */
+    public setDateValue(value: Date): QueryFilter {
         this._value = `'${value.toISOString()}'`;
+        return this;
     }
     
-    public setOperation(operation: QueryFilter.Operation) {
+    /**
+     * Set filter operation
+     * @param operation to be used in filtering
+     */
+    public setOperation(operation: QueryFilter.Operation): QueryFilter {
         this._operation = operation;
         if (operation === QueryFilter.Operation.ISNULL ||
             operation === QueryFilter.Operation.ISNOTNULL) {
             this._value = undefined;
         }
+        return this;
     }
     
     /**
-     * Creates query parameter value
+     * Set field to be filtered
+     * @param field field to be used in filter
+     */
+    public setField(field: string): QueryFilter {
+        this._field = field;
+        return this;
+    }
+    
+    /**
+     * Creates string from query parameter value. String may need to be URL encoded.
      * @returns String built from current values to be used as query parameter value.
      */
     public buildValue(): string {
+        if (this._operation === QueryFilter.Operation.ISNULL ||
+            this._operation === QueryFilter.Operation.ISNOTNULL) {
+            return `${this.field}:${this._operation}`;
+        }
         return `${this.field}:${this._operation}:${this._value}`;
     }
     
