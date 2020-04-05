@@ -1,5 +1,10 @@
-export class QueryFilter {
+import { Serializable } from "./types";
 
+/**
+ * Query filter rule
+ */
+export class QueryFilter implements Serializable {
+    
     private _field: string;
     private _operation: QueryFilter.Operation;
     private _value: string;
@@ -9,20 +14,6 @@ export class QueryFilter {
      */
     public get value(): string {
         return this._value;
-    }
-    
-    /**
-     * Filter operation
-     */
-    public get operation(): QueryFilter.Operation {
-        return this._operation;
-    }
-    
-    /**
-     * Field name to filter by
-     */
-    public get field(): string {
-        return this._field;
     }
     
     /**
@@ -62,16 +53,29 @@ export class QueryFilter {
     }
     
     /**
+     * Filter operation
+     */
+    public get operation(): QueryFilter.Operation {
+        return this._operation;
+    }
+    
+    /**
      * Set filter operation
      * @param operation to be used in filtering
      */
     public setOperation(operation: QueryFilter.Operation): QueryFilter {
         this._operation = operation;
-        if (operation === QueryFilter.Operation.ISNULL ||
-            operation === QueryFilter.Operation.ISNOTNULL) {
+        if (this.isBinaryOperation()) {
             this._value = undefined;
         }
         return this;
+    }
+    
+    /**
+     * Field name to filter by
+     */
+    public get field(): string {
+        return this._field;
     }
     
     /**
@@ -83,16 +87,16 @@ export class QueryFilter {
         return this;
     }
     
-    /**
-     * Creates string from query parameter value. String may need to be URL encoded.
-     * @returns String built from current values to be used as query parameter value.
-     */
-    public buildValue(): string {
-        if (this._operation === QueryFilter.Operation.ISNULL ||
-            this._operation === QueryFilter.Operation.ISNOTNULL) {
+    public serialize(): string {
+        if (this.isBinaryOperation()) {
             return `${this.field}:${this._operation}`;
         }
         return `${this.field}:${this._operation}:${this._value}`;
+    }
+    
+    private isBinaryOperation(): boolean {
+        return this._operation === QueryFilter.Operation.ISNULL ||
+            this._operation === QueryFilter.Operation.ISNOTNULL;
     }
     
 }

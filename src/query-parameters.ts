@@ -2,6 +2,9 @@ import { QueryOrder } from "./order";
 import { QueryFilter } from "./filter";
 import { QueryParamMap } from "./types";
 
+/**
+ * Query parameters object
+ */
 export class QueryParameters {
     
     private _offset: number;
@@ -17,29 +20,8 @@ export class QueryParameters {
     }
     
     /**
-     * Limit number of returned results
-     */
-    public get limit(): number {
-        return this._limit;
-    }
-    
-    /**
-     * Query sorting rules
-     */
-    public get order(): QueryOrder[] {
-        return this._order;
-    }
-    
-    /**
-     * Query filter rules
-     */
-    public get filters(): QueryFilter[] {
-        return this._filters;
-    }
-    
-    /**
      * Set query offset
-     * @param offset skip first <tt>x</tt> results
+     * @param offset skip first <code>x</code> results
      */
     public setOffset(offset: number): QueryParameters {
         this._offset = offset;
@@ -47,12 +29,27 @@ export class QueryParameters {
     }
     
     /**
+     * Limit number of returned results
+     */
+    public get limit(): number {
+        return this._limit;
+    }
+    
+    /**
      * Set query limit
-     * @param limit return only <tt>x</tt> results
+     * @param limit return only <code>x</code> results
      */
     public setLimit(limit: number): QueryParameters {
         this._limit = limit;
         return this;
+    }
+    
+    /**
+     * Query sorting rules
+     * @returns copy of order array
+     */
+    public get order(): QueryOrder[] {
+        return [...this._order];
     }
     
     /**
@@ -68,7 +65,7 @@ export class QueryParameters {
      * Add single sorting rule
      * @param order single order rule
      */
-    public addSingleOrder(order: QueryOrder): QueryParameters {
+    public appendOrder(order: QueryOrder): QueryParameters {
         if (!this._order) {
             this._order = [];
         }
@@ -84,6 +81,14 @@ export class QueryParameters {
     }
     
     /**
+     * Query filter rules
+     * @returns copy of filter array
+     */
+    public get filters(): QueryFilter[] {
+        return [...this._filters];
+    }
+    
+    /**
      * Set filter rules
      * @param filters array of filter rules
      */
@@ -96,7 +101,7 @@ export class QueryParameters {
      * Add single filter rule
      * @param filter single filter rule
      */
-    public addSingleFilter(filter: QueryFilter): QueryParameters {
+    public appendFilter(filter: QueryFilter): QueryParameters {
         if (!this._filters) {
             this._filters = [];
         }
@@ -115,19 +120,19 @@ export class QueryParameters {
      * Creates query parameter map from current values. Values may need to be URL encoded.
      * @returns object with values prepared to be sent
      */
-    public getMap(): QueryParamMap {
+    public getRawValue(): QueryParamMap {
         const map: QueryParamMap = {};
         if (this._offset) {
-            map.offset = this._offset;
+            map.offset = this._offset.toString(10);
         }
         if (this._limit) {
-            map.limit = this._limit;
+            map.limit = this._limit.toString(10);
         }
         if (this._filters) {
-            map.filters = this._filters.map(f => f.buildValue()).join(" ");
+            map.filters = this._filters.map(f => f.serialize()).join(" ");
         }
         if (this._order) {
-            map.order = this._order.map(o => o.buildValue()).join(",");
+            map.order = this._order.map(o => o.serialize()).join(",");
         }
         return map;
     }
@@ -137,7 +142,7 @@ export class QueryParameters {
      * @returns string containing query parameters
      */
     public getQueryString(): string {
-        const map = this.getMap();
+        const map = this.getRawValue();
         return Object.keys(map)
             .filter(key => (map as any)[key])
             .map(key => {

@@ -1,4 +1,9 @@
-export class QueryOrder {
+import { Serializable } from "./types";
+
+/**
+ * Query sorting rule
+ */
+export class QueryOrder implements Serializable {
     
     private _field: string;
     private _order: QueryOrder.Direction;
@@ -40,16 +45,12 @@ export class QueryOrder {
      * @param field field to sort by
      * @param order direction of sorting
      */
-    constructor(field: string, order: QueryOrder.Direction) {
+    constructor(field: string, order: QueryOrder.Direction = QueryOrder.Direction.ASC) {
         this._field = field;
         this._order = order;
     }
     
-    /**
-     * Creates query parameter value
-     * @returns String built from current values to be used as query parameter value.
-     */
-    public buildValue(): string {
+    public serialize(): string {
         return `${this._field} ${this._order}`;
     }
 }
