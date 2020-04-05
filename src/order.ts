@@ -9,6 +9,18 @@ export class QueryOrder implements Serializable {
     private _order: QueryOrder.Direction;
     
     /**
+     * Creates new sorting directive
+     * @param field field to sort by
+     * @param order direction of sorting
+     */
+    public static create(field: string, order: QueryOrder.Direction = QueryOrder.Direction.ASC): QueryOrder {
+        const queryOrder = new QueryOrder();
+        queryOrder._field = field;
+        queryOrder._order = order;
+        return queryOrder;
+    }
+    
+    /**
      * Which field to sort by
      */
     public get field(): string {
@@ -38,16 +50,6 @@ export class QueryOrder implements Serializable {
     public setOrder(order: QueryOrder.Direction): QueryOrder {
         this._order = order;
         return this;
-    }
-    
-    /**
-     * Creates new sorting directive
-     * @param field field to sort by
-     * @param order direction of sorting
-     */
-    constructor(field: string, order: QueryOrder.Direction = QueryOrder.Direction.ASC) {
-        this._field = field;
-        this._order = order;
     }
     
     public serialize(): string {
